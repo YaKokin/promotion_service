@@ -1,7 +1,11 @@
 package school.faang.promotionservice.model.search;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -16,6 +20,9 @@ import java.util.List;
 @Document(indexName = "promotions")
 @Setting(settingPath = "elasticsearch/settings.json")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PromotionUserDocument {
 
     @Id

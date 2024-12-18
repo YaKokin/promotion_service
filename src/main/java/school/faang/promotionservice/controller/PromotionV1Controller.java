@@ -30,7 +30,7 @@ public class PromotionV1Controller {
     private final UserPromotionSearchService userPromotionSearchService;
     private final PromotionService promotionService;
 
-    @GetMapping("/search/users")
+    @PostMapping("/search/users")
     @ResponseStatus(HttpStatus.OK)
     public List<Long> searchPromotedUsers(
             @Parameter(description = "Required resource count")

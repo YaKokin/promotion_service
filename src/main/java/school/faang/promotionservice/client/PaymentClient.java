@@ -11,7 +11,7 @@ import school.faang.promotionservice.dto.payment.PaymentResponse;
 
 @FeignClient(
         name = "payment-service",
-        url = "${payment-service.service.url",
+        url = "${payment-service.service.url}",
         configuration = FeignConfig.class
 )
 public interface PaymentClient {

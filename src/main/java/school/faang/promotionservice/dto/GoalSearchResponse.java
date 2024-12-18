@@ -7,6 +7,7 @@ public record GoalSearchResponse(
         Long goalId,
         String title,
         String description,
+        //TODO подумать над тем, что передавать прямо enum
         String status,
         LocalDateTime deadLine,
         LocalDateTime createdAt,
