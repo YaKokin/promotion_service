@@ -24,7 +24,7 @@ import school.faang.promotionservice.service.search.filter.impl.ExcludeViewedUse
 import school.faang.promotionservice.service.search.filter.impl.ExperienceRangeFilter;
 import school.faang.promotionservice.service.search.filter.impl.SkillFuzzyFilter;
 import school.faang.promotionservice.service.search.filter.impl.TextMatchFilter;
-import school.faang.promotionservice.utils.WeightedRandomSelection;
+import school.faang.promotionservice.utils.WeightedRandomSelector;
 
 import java.io.IOException;
 import java.util.List;
@@ -126,7 +126,7 @@ public class UserPromotionSearchService {
 
         List<PromotionUserDocument> activePromotions = searchPromotionsByFilters(userSearchRequest, viewedUserIds);
 
-        return WeightedRandomSelection.selectWeightedRandomElements(
+        return WeightedRandomSelector.selectWeightedRandomElements(
                 limit,
                 activePromotions,
                 PromotionUserDocument::getPriority);

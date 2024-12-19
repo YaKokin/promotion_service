@@ -1,12 +1,9 @@
 package school.faang.promotionservice.model.search;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -19,19 +16,10 @@ import java.util.List;
 @Data
 @Document(indexName = "promotions")
 @Setting(settingPath = "elasticsearch/settings.json")
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PromotionUserDocument {
-
-    @Id
-    private Long promotionId;
-
-    @Field(type = FieldType.Long)
-    private Long tariffId;
-
-    @Field(type = FieldType.Double)
-    private Double priority;
+@EqualsAndHashCode(callSuper = true)
+public class UserPromotionDocument extends PromotionDocument {
 
     @Field(type = FieldType.Long)
     private Long userId;
@@ -55,8 +43,4 @@ public class PromotionUserDocument {
 
     @Field(type = FieldType.Double)
     private Double averageRating;
-
-    public boolean isSamePromotionId(Long promotionId) {
-        return this.promotionId.equals(promotionId);
-    }
 }

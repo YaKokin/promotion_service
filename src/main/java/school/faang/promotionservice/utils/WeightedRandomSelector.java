@@ -1,15 +1,18 @@
 package school.faang.promotionservice.utils;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
-public class WeightedRandomSelection {
+@Service
+public class WeightedRandomSelector<T> {
 
-    public static <T> List<T> selectWeightedRandomElements(Integer requiredCount,
+    public List<T> selectWeightedRandomElements(Integer requiredCount,
                                                            List<T> items,
-                                                           Function<T, Double> function) {
+                                                           Function<T, Double> priorityExtractor) {
 
         if (items == null) {
             throw new IllegalArgumentException("items cannot be null");
@@ -19,7 +22,7 @@ public class WeightedRandomSelection {
         List<T> availableItems = new ArrayList<>(items);
 
         for (int i = 0; i < requiredCount && !availableItems.isEmpty(); i++) {
-            T randomItem = selectWeightedRandom(availableItems, function);
+            T randomItem = selectWeightedRandom(availableItems, priorityExtractor);
             if (randomItem != null) {
                 selectedItems.add(randomItem);
                 availableItems.remove(randomItem);
@@ -28,7 +31,7 @@ public class WeightedRandomSelection {
         return selectedItems;
     }
 
-    private static <T> T selectWeightedRandom(List<T> items, Function<T, Double> function) {
+    private T selectWeightedRandom(List<T> items, Function<T, Double> function) {
         if (items == null) {
             throw new IllegalArgumentException("items cannot be null");
         }

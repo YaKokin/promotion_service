@@ -3,6 +3,7 @@ package school.faang.promotionservice.repository.search;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import school.faang.promotionservice.model.search.PromotionUserDocument;
+import school.faang.promotionservice.model.search.UserPromotionDocument;
 
 import java.util.List;
 import java.util.Optional;
