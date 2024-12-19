@@ -2,13 +2,14 @@ package school.faang.promotionservice.service.cache;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import school.faang.promotionservice.model.search.PromotionDocument;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public abstract class AbstractSessionResourceService {
+public abstract class AbstractSessionResourceService<DOC> {
 
     private final RedisTemplate<String, Long> redisTemplate;
 
@@ -17,13 +18,17 @@ public abstract class AbstractSessionResourceService {
     private final String resourcePrefix;
 
     public List<Long> getViewedUsers(String sessionId) {
-        String key = toUserKey(sessionId);
+        String key = toKey(sessionId);
         Set<Long> viewedResourceIds = redisTemplate.opsForSet().members(key);
         return viewedResourceIds == null ? new ArrayList<>()
                 : new ArrayList<>(viewedResourceIds);
     }
 
-    private String toUserKey(String sessionId) {
+    private String toKey(String sessionId) {
         return String.format("%s:%s:%s", KEY_PREFIX, resourcePrefix, sessionId);
     }
+
+    public abstract Class<? extends PromotionDocument> getDocType();
+
+    public abstract boolean isSameDocType(Class<? extends PromotionDocument> otherDocType);
 }

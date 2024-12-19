@@ -1,4 +1,4 @@
-package school.faang.promotionservice.message;
+package school.faang.promotionservice.message.consumer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

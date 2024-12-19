@@ -33,9 +33,6 @@ public class PromotionUserDocument {
     @Field(type = FieldType.Double)
     private Double priority;
 
-    @Field(type = FieldType.Long)
-    private Long userId;
-
     @MultiField(mainField = @Field(type = FieldType.Text, analyzer = "standard"),
             otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword))
     private String countryName;

@@ -14,7 +14,7 @@ public class ExcludeViewedUsersFilter implements Filter {
 
     private final List<Long> excludedUserIds;
 
-    private static final String USER_ID_FIELD = "userId";
+    private static final String USER_ID_FIELD = "resourceId";
 
     @Override
     public void apply(BoolQuery.Builder boolQuery) {

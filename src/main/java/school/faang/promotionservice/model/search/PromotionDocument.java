@@ -23,6 +23,9 @@ public class PromotionDocument {
     @Field(type = FieldType.Double)
     private Double priority;
 
+    @Field(type = FieldType.Long)
+    private Long resourceId;
+
     public boolean isSamePromotionId(Long promotionId) {
         return this.promotionId.equals(promotionId);
     }

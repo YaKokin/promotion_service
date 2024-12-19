@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import school.faang.promotionservice.dto.PromotionResponseDto;
 import school.faang.promotionservice.dto.user.UserSearchRequest;
 import school.faang.promotionservice.service.PromotionService;
+import school.faang.promotionservice.service.search.UserPromotionProcessor;
 import school.faang.promotionservice.service.search.UserPromotionSearchService;
 
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 @Validated
 public class PromotionV1Controller {
 
-    private final UserPromotionSearchService userPromotionSearchService;
+    private final UserPromotionProcessor userPromotionProcessor;
     private final PromotionService promotionService;
 
     @PostMapping("/search/users")
@@ -42,7 +43,7 @@ public class PromotionV1Controller {
             @Parameter(description = "User filter for search")
             @RequestBody @Validated UserSearchRequest userSearchRequest
     ) {
-        return userPromotionSearchService.searchPromotedUserIds(requiredResCount, sessionId, userSearchRequest);
+        return userPromotionProcessor.searchPromotions(requiredResCount, sessionId, userSearchRequest);
     }
 
     @PostMapping("/buy/users")
