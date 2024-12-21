@@ -39,12 +39,8 @@ import java.util.List;
 @Slf4j
 public class PromotionV1Controller {
 
-    private static final String PROMOTION_USER_INDEX = "promotions";
-
     private final UserPromotionProcessor userPromotionProcessor;
     private final PromotionService promotionService;
-    private final PromotionUserDocumentRepository repository;
-    private final ElasticsearchClient elasticsearchClient;
 
     @PostMapping("/search/users")
     @ResponseStatus(HttpStatus.OK)
@@ -61,28 +57,6 @@ public class PromotionV1Controller {
         return userPromotionProcessor.searchPromotions(requiredResCount, sessionId, userSearchRequest);
     }
 
-    @GetMapping
-    public void test() {
-        UserSearchRequest request = new UserSearchRequest(null, null, 1, 100);
-        SearchRequest request1 = new SearchQueryBuilder()
-                .indexName(PROMOTION_USER_INDEX)
-                .addFilter(new TextMatchFilter(request.query()))
-                .addFilter(new SkillFuzzyFilter(request.skillNames()))
-                .addFilter(new ExperienceRangeFilter(
-                        request.experienceFrom(),
-                        request.experienceTo()))
-                .build();
-        SearchResponse<UserPromotionDocument> response;
-        try {
-            response = elasticsearchClient.search(request1, UserPromotionDocument.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(response);
-        UserPromotionDocument result = repository.findByUserId(7L).orElse(null);
-        log.info(result.toString());
-    }
-
     @PostMapping("/buy/users")
     public PromotionResponseDto buyUserPromotion(
             @Parameter(description = "Tariff Id")
@@ -91,7 +65,6 @@ public class PromotionV1Controller {
             @Parameter(description = "User id")
             @RequestHeader(value = "x-user-id") @Positive long userId
     ) {
-
         return promotionService.buyUserPromotion(tariffId, userId);
     }
 }
