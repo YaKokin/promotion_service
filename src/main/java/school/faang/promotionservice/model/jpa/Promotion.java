@@ -38,7 +38,7 @@ public class Promotion {
     private Tariff tariff;
 
     @Column(name = "remaining_impressions", nullable = false)
-    private int remainingImpressions;
+    private long remainingImpressions;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)

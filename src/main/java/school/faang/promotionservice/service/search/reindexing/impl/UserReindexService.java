@@ -47,9 +47,4 @@ public class UserReindexService implements ReindexService<UserPromotionDocument,
     public void deleteAllFromIndex(List<Long> promotionIds) {
         promotionUserDocumentRepository.deleteByPromotionIdIn(promotionIds);
     }
-
-    @Override
-    public boolean isSameDocType(Class<?> otherDocType) {
-        return getDocType().equals(otherDocType);
-    }
 }

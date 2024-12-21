@@ -2,10 +2,12 @@ package school.faang.promotionservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import school.faang.promotionservice.client.PaymentClient;
 import school.faang.promotionservice.client.UserClient;
+import school.faang.promotionservice.config.thread.pool.ThreadPoolConfig;
 import school.faang.promotionservice.dto.PromotionResponseDto;
 import school.faang.promotionservice.dto.payment.Currency;
 import school.faang.promotionservice.dto.payment.PaymentRequest;
@@ -17,13 +19,14 @@ import school.faang.promotionservice.model.jpa.PromotionStatus;
 import school.faang.promotionservice.model.jpa.Resource;
 import school.faang.promotionservice.model.jpa.ResourceType;
 import school.faang.promotionservice.model.jpa.Tariff;
-import school.faang.promotionservice.model.search.PromotionUserDocument;
+import school.faang.promotionservice.model.search.UserPromotionDocument;
 import school.faang.promotionservice.repository.jpa.PromotionRepository;
 import school.faang.promotionservice.service.cache.ImpressionCounterService;
 import school.faang.promotionservice.service.priority.calulator.PriorityCalculator;
-import school.faang.promotionservice.service.search.UserPromotionSearchService;
+import school.faang.promotionservice.service.search.reindexing.impl.UserReindexService;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -33,7 +36,7 @@ public class PromotionService {
 
     private final PromotionRepository promotionRepository;
     private final TariffService tariffService;
-    private final UserPromotionSearchService userPromotionSearchService;
+    private final UserReindexService userReindexService;
     private final ImpressionCounterService impressionCounterService;
     private final UserClient userClient;
     private final PaymentClient paymentClient;
@@ -53,8 +56,8 @@ public class PromotionService {
         sendPaymentRequest(paymentNumber, tariff);
 
         promotionRepository.save(promotion);
-        impressionCounterService.setPromotionCounter(promotion.getId(), (long) promotion.getRemainingImpressions());
-        userPromotionSearchService.index(buildPromotionUserDoc(promotion, user));
+        impressionCounterService.setPromotionCounter(promotion.getId(), (int) promotion.getRemainingImpressions());
+        userReindexService.addToIndex(buildPromotionUserDoc(promotion, user));
 
         return promotionMapper.toResponseDto(promotion);
     }
@@ -80,8 +83,8 @@ public class PromotionService {
         }
     }
 
-    private PromotionUserDocument buildPromotionUserDoc(Promotion promotion, UserSearchResponse user) {
-        return PromotionUserDocument.builder()
+    private UserPromotionDocument buildPromotionUserDoc(Promotion promotion, UserSearchResponse user) {
+        return UserPromotionDocument.builder()
                 .promotionId(promotion.getId())
                 .tariffId(promotion.getTariffId())
                 .priority(priorityCalculator.calculate(promotion))
@@ -91,6 +94,7 @@ public class PromotionService {
                 .experience(user.experience())
                 .skillNames(user.skillNames())
                 .averageRating(user.averageRating())
+                .resourceId(user.userId())
                 .build();
     }
 
@@ -116,5 +120,14 @@ public class PromotionService {
                 .currency(Currency.USD)
                 .build();
         paymentClient.sendPayment(paymentRequest);
+    }
+
+    public List<Promotion> findByIdIn(List<Long> promotionIds) {
+        return promotionRepository.findByIdIn(promotionIds);
+    }
+
+    @Async(ThreadPoolConfig.DEFAULT_THREAD_POOL_BEAN_NAME)
+    public void saveAllAsync(List<Promotion> promotions) {
+        promotionRepository.saveAll(promotions);
     }
 }

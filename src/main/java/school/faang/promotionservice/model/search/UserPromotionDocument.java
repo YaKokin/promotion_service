@@ -1,9 +1,10 @@
 package school.faang.promotionservice.model.search;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -16,9 +17,10 @@ import java.util.List;
 @Data
 @Document(indexName = "promotions")
 @Setting(settingPath = "elasticsearch/settings.json")
-@Builder
+@SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class UserPromotionDocument extends PromotionDocument {
 
     @Field(type = FieldType.Long)

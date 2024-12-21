@@ -11,6 +11,4 @@ public interface ReindexService<DOC, EVENT> {
     void reindex (EVENT reindexEvent);
 
     void deleteAllFromIndex(List<Long> promotionIds);
-
-    boolean isSameDocType(Class<?> otherDocType);
 }

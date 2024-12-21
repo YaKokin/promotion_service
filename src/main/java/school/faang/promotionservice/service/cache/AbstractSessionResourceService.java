@@ -2,7 +2,6 @@ package school.faang.promotionservice.service.cache;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import school.faang.promotionservice.model.search.PromotionDocument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +26,4 @@ public abstract class AbstractSessionResourceService<DOC> {
     private String toKey(String sessionId) {
         return String.format("%s:%s:%s", KEY_PREFIX, resourcePrefix, sessionId);
     }
-
-    public abstract Class<? extends PromotionDocument> getDocType();
-
-    public abstract boolean isSameDocType(Class<? extends PromotionDocument> otherDocType);
 }

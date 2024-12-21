@@ -1,11 +1,10 @@
 package school.faang.promotionservice.exception;
 
 public class SearchServiceExceptions extends RuntimeException {
-    public SearchServiceExceptions(String message, Throwable cause) {
-        super(message, cause);
-    }
 
-    public SearchServiceExceptions(Throwable cause) {
-        super(cause);
+    private static final String SEARCHING_ERROR = "Search error for doc %s";
+
+    public SearchServiceExceptions(Throwable cause, Class<?> docType) {
+        super(String.format(SEARCHING_ERROR, docType), cause);
     }
 }
