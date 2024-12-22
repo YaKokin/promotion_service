@@ -65,7 +65,6 @@ public class UserPromotionProcessor extends ResourcePromotionProcessor<UserPromo
                         userSearchRequest.experienceTo()));
 
 
-        List<Long> result = searchPromotedUserIds(limit, sessionId, UserPromotionDocument.class, searchQueryBuilder);
-        return result;
+        return searchPromotedUserIds(limit, sessionId, UserPromotionDocument.class, searchQueryBuilder);
     }
 }
