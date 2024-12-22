@@ -77,7 +77,7 @@ public abstract class ResourcePromotionProcessor<DOC extends PromotionDocument> 
         }
     }
 
-    protected List<Long> searchPromotedUserIds(Integer limit,
+    public List<Long> searchPromotedUserIds(Integer limit,
                                                String sessionId,
                                                Class<DOC> docType,
                                                SearchQueryBuilder searchQueryBuilder
@@ -88,7 +88,6 @@ public abstract class ResourcePromotionProcessor<DOC extends PromotionDocument> 
                 getPromotionsForDisplay(limit, searchRequest, docType);
 
         Map<Long, Integer> updatedPromotionCounters = decrementCounters(promotionsDocsForDisplay);
-        removePromotionDocIfCounterIsNegative(updatedPromotionCounters, promotionsDocsForDisplay);
 
         List<Long> promotionIdsToRemove = getPromotionIdsToRemove(updatedPromotionCounters);
 
@@ -192,15 +191,6 @@ public abstract class ResourcePromotionProcessor<DOC extends PromotionDocument> 
             promotion.setRemainingImpressions(0);
         });
         promotionService.saveAllAsync(promotions);
-    }
-
-    private void removePromotionDocIfCounterIsNegative(Map<Long, Integer> updatedPromotionCounters,
-                                                       List<DOC> promotionsForDisplay) {
-        updatedPromotionCounters.entrySet().stream()
-                .filter(entry -> entry.getValue() < 0)
-                .forEach(entry -> promotionsForDisplay.removeIf(
-                        promotionDoc -> promotionDoc.isSamePromotionId(entry.getKey()))
-                );
     }
 
     private List<DOC> getPromotionsForDisplay(Integer limit,

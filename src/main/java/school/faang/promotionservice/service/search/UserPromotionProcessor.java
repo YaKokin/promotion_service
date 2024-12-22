@@ -31,7 +31,7 @@ public class UserPromotionProcessor extends ResourcePromotionProcessor<UserPromo
     @Autowired
     public UserPromotionProcessor(
             ImpressionCounterService impressionCounterService,
-            PromotionService promotionRepository,
+            PromotionService promotionService,
             ElasticsearchClient elasticsearchClient,
             ExecutorService defaultThreadPool,
             UserContext userContext,
@@ -43,7 +43,7 @@ public class UserPromotionProcessor extends ResourcePromotionProcessor<UserPromo
             PromotionUserDocumentRepository promotionUserDocumentRepository) {
 
         super(impressionCounterService,
-                promotionRepository,
+                promotionService,
                 elasticsearchClient,
                 defaultThreadPool,
                 userContext,
