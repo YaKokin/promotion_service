@@ -1,9 +1,11 @@
 package school.faang.promotionservice.dto.user;
 
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record UserSearchRequest(
         String query,
         List<String> skillNames,

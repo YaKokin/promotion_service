@@ -30,7 +30,7 @@ public class CollectionUtils {
 
     public static <T> List<T> findMissingElements(List<T> source, List<T> compareList) {
         return source.stream()
-                .filter(skill -> !compareList.contains(skill))
+                .filter(item -> !compareList.contains(item))
                 .toList();
     }
 

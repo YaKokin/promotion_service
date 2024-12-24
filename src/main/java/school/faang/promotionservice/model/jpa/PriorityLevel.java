@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "priority_level")
+@Table(name = "prioritylevel")
 public class PriorityLevel {
 
     @Id

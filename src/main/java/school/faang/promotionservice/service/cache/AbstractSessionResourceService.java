@@ -2,29 +2,28 @@ package school.faang.promotionservice.service.cache;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Service
 @RequiredArgsConstructor
-public class SessionResourceService {
+public abstract class AbstractSessionResourceService<DOC> {
 
     private final RedisTemplate<String, Long> redisTemplate;
 
     private static final String KEY_PREFIX = "session";
-    private static final String USER_PREFIX = "user";
+
+    private final String resourcePrefix;
 
     public List<Long> getViewedUsers(String sessionId) {
-        String key = toUserKey(sessionId);
+        String key = toKey(sessionId);
         Set<Long> viewedResourceIds = redisTemplate.opsForSet().members(key);
         return viewedResourceIds == null ? new ArrayList<>()
                 : new ArrayList<>(viewedResourceIds);
     }
 
-    private String toUserKey(String sessionId) {
-        return String.format("%s:%s:%s", KEY_PREFIX, USER_PREFIX, sessionId);
+    private String toKey(String sessionId) {
+        return String.format("%s:%s:%s", KEY_PREFIX, resourcePrefix, sessionId);
     }
 }

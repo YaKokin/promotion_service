@@ -1,4 +1,4 @@
-package school.faang.promotionservice.service.search;
+package school.faang.promotionservice.builder;
 
 import co.elastic.clients.elasticsearch._types.SortOptions;
 import co.elastic.clients.elasticsearch._types.SortOrder;
@@ -10,13 +10,13 @@ import school.faang.promotionservice.service.search.filter.Filter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserSearchQueryBuilder {
+public class SearchQueryBuilder {
 
     private final SearchRequest.Builder searchRequestBuilder;
     private final BoolQuery.Builder boolQueryBuilder;
     private final List<Filter> filters = new ArrayList<>();
 
-    public UserSearchQueryBuilder() {
+    public SearchQueryBuilder() {
         searchRequestBuilder = new SearchRequest.Builder();
         boolQueryBuilder = new BoolQuery.Builder();
     }
@@ -29,27 +29,22 @@ public class UserSearchQueryBuilder {
                 .build();
     }
 
-    public UserSearchQueryBuilder indexName(String indexName) {
+    public SearchQueryBuilder indexName(String indexName) {
         searchRequestBuilder.index(indexName);
         return this;
     }
 
-    public UserSearchQueryBuilder size(int size) {
+    public SearchQueryBuilder size(int size) {
         searchRequestBuilder.size(size);
         return this;
     }
 
-    public UserSearchQueryBuilder from(int from) {
-        searchRequestBuilder.from(from);
-        return this;
-    }
-
-    public UserSearchQueryBuilder addFilter(Filter filter) {
+    public SearchQueryBuilder addFilter(Filter filter) {
         filters.add(filter);
         return this;
     }
 
-    public UserSearchQueryBuilder sortOptions(Pageable pageable) {
+    public SearchQueryBuilder sortOptions(Pageable pageable) {
         if (pageable.getSort().isSorted()) {
             List<SortOptions> sortOptions = pageable.getSort().stream()
                     .map(order -> SortOptions.of(s -> s

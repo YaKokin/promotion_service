@@ -15,17 +15,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImpressionCounterService {
 
-    private final RedisTemplate<String, Long> redisTemplate;
+    private final RedisTemplate<String, Integer> redisTemplate;
     private final DefaultRedisScript<Long> decrementScript;
 
     private static final String KEY_PREFIX = "promotion";
 
-    public void setPromotionCounter(Long promotionId, Long remainingImpression) {
+    public void setPromotionCounter(Long promotionId, Integer remainingImpression) {
         String key = toKey(promotionId);
         redisTemplate.opsForValue().set(key, remainingImpression);
     }
 
-    public Long getPromotionCounter(Long promotionId) {
+    public Integer getPromotionCounter(Long promotionId) {
         String key = toKey(promotionId);
         return redisTemplate.opsForValue().get(key);
     }
@@ -35,16 +35,16 @@ public class ImpressionCounterService {
         return redisTemplate.opsForValue().increment(key);
     }
 
-    private Long decrement(@Positive Long promotionId) {
+    private Integer decrement(@Positive Long promotionId) {
         String key = toKey(promotionId);
-        return redisTemplate.execute(decrementScript, Collections.singletonList(key));
+        return Math.toIntExact(redisTemplate.execute(decrementScript, Collections.singletonList(key)));
     }
 
-    public Map<Long, Long> decrementPromotionCounters(List<Long> promotionIds) {
+    public Map<Long, Integer> decrementPromotionCounters(List<Long> promotionIds) {
         if (promotionIds == null) {
             throw new IllegalArgumentException("promotionIds cannot be null");
         }
-        List<Long> results = promotionIds.stream()
+        List<Integer> results = promotionIds.stream()
                 .map(this::decrement)
                 .toList();
 
