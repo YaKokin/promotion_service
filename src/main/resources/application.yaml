@@ -1,0 +1,71 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/postgres
+    username: user
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  data:
+    redis:
+      port: 6379
+      host: localhost
+      channels:
+        mentorship-channel:
+          name: mentorship_channel
+        follower-event-channel:
+          name: follower_event
+      database: 0
+      scripts:
+        decrement-counter:
+          path: scripts/lua/multiple_decrement.lua
+  elasticsearch:
+    uris: http://localhost:9200
+
+  kafka:
+    bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
+    consumer:
+      group-id: update_user_consumer_group
+      auto-offset-reset: earliest
+    topics:
+      update-user-topic:
+        name: update_user_topic
+        partitions: 3
+        replication_factor: 3
+      deactivate-promotion-topic:
+        name: deactivate_promotion_topic
+        partitions: 3
+        replication_factor: 3
+
+thread-pool:
+  default-thread-pool:
+    num-of-thread: 5
+
+server:
+  port: 8081
+
+logging:
+  level:
+    root: info
+
+user-service:
+  service:
+    url: http://localhost:8080
+  host: localhost
+  port: 8080
+
+payment-service:
+  service:
+    url: http://localhost:9080
+  host: localhost
+  port: 9080
